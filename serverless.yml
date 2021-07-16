@@ -1,0 +1,88 @@
+service: redash-bot-bolt
+frameworkVersion: '2'
+useDotenv: true
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: ap-northeast-1
+  timeout: 30
+  environment:
+    REDASH_HOST: ${env:REDASH_HOST}
+    SLACK_SIGNING_SECRET: ${env:SLACK_SIGNING_SECRET}
+    SLACK_BOT_TOKEN: ${env:SLACK_BOT_TOKEN}
+    REDASH_API_KEY: ${env:REDASH_API_KEY}
+    NODE_PATH: "./:/opt/node_modules"
+functions:
+  slack:
+    handler: app.handler
+    events:
+      - http:
+          path: slack/events
+          method: post
+#     vpc:
+#       securityGroupIds:
+#         - { Ref: SecurityGroup }
+#       subnetIds:
+#         - { Ref: PrivateSubnetA }
+#         - { Ref: PrivateSubnetB }
+    layers:
+      - { Ref: SlackLayerLambdaLayer }
+package:
+  patterns:
+    - '!node_modules/**'
+    - '!package.json'
+    - '!package-lock.json'
+layers:
+  slackLayer:
+    path: ./
+    compatibleRuntimes: nodejs12.x
+    package:
+      patterns:
+        - 'node_modules/**'
+        - '!app.js'
+        - package.json
+        - package-lock.json
+# resources:
+#   Resources:
+#     PrivateSubnetA:
+#       Type: AWS::EC2::Subnet
+#       Properties:
+#         AvailabilityZone: ap-northeast-1a
+#         CidrBlock: ${env:CIDR_BLOCK_A}
+#         VpcId: ${env:REDASH_APP_VPC_ID}
+#         Tags:
+#           - Key: Name
+#             Value: !Sub ${env:REDASH_HOST} Private Subnet Lambda(AZ1)
+#     PrivateSubnetB:
+#       Type: AWS::EC2::Subnet
+#       Properties:
+#         AvailabilityZone: ap-northeast-1c
+#         CidrBlock: ${env:CIDR_BLOCK_B}
+#         VpcId: ${env:REDASH_APP_VPC_ID}
+#         Tags:
+#           - Key: Name
+#             Value: !Sub ${env:REDASH_HOST} Private Subnet Lambda(AZ2)
+#     SubnetRouteTableAssociationA:
+#       Type: AWS::EC2::SubnetRouteTableAssociation
+#       Properties:
+#         RouteTableId: ${env:REDASH_APP_ROUTE_TABLE_ID}
+#         SubnetId: !Ref PrivateSubnetA
+#     SubnetRouteTableAssociationB:
+#       Type: AWS::EC2::SubnetRouteTableAssociation
+#       Properties:
+#         RouteTableId: ${env:REDASH_APP_ROUTE_TABLE_ID}
+#         SubnetId: !Ref PrivateSubnetB
+#     SecurityGroup:
+#       Type: AWS::EC2::SecurityGroup
+#       Properties:
+#         GroupDescription: SecurityGroup for Lambda
+#         GroupName: !Join ["-", [!Select [0, !Split [".", "${env:REDASH_HOST}"]], "Lambda"]]
+#         VpcId: ${env:REDASH_APP_VPC_ID}
+#     SecurityGroupIngress:
+#       Type: AWS::EC2::SecurityGroupIngress
+#       Properties:
+#         GroupId: ${env:REDASH_APP_SECURITY_GROUP_ID}
+#         SourceSecurityGroupId: !Ref SecurityGroup
+#         IpProtocol: "tcp"
+#         FromPort: 443
+#         ToPort: 443
