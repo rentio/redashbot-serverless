@@ -9,7 +9,7 @@ This is Slack bot for [Redash](https://redash.io/).
 * Made with [Bolt](https://slack.dev/bolt-js/concepts) framework (Non-Socket Mode).
 * Take a screenshot of query visualization or dashboard.
 
-<img src="https://user-images.githubusercontent.com/34906524/125292245-3c6a5f80-e35d-11eb-940f-1479222cf3f9.png" width="450">
+<img src="https://github.com/rentio/redashbot-serverless/blob/images/readme.png" width="450">
 
 ## How to develop
 
