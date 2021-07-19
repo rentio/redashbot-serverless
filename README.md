@@ -1,3 +1,18 @@
+# 開発フロー
+
+このリポジトリは公開しているリポジトリ(https://github.com/rentio/redashbot-serverless) をクローン&非公開化して使用しており、開発フローとしては以下のような流れでお願いします。
+
+* `rentio/redashbot-serverless` に変更を反映させる場合
+  * `git remote add upstream https://github.com/rentio/redashbot-serverless.git`
+  * upstream に向けて push して PR を作成
+  * レビュー & merge 後に以下でこちらの非公開リポジトリにも反映
+    * `git fetch upstream`
+    * `git merge upstream/main`
+    * `git push origin --tags`
+* `rentio/redashbot-serverless-private` に変更を反映させる場合(公開リポジトリに含めるべきでない変更など)
+  * origin に向けて push して PR を作成
+---
+
 # Slack Bot for Redash on AWS Lambda
 
 This is Slack bot for [Redash](https://redash.io/).
