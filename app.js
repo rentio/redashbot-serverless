@@ -78,8 +78,12 @@ const uploadScreenShot = async ({ client, body }) => {
   })
 }
 
-app.event('app_mention', async ({client, body}) => {
-  await uploadScreenShot({ client, body })
+app.event('app_mention', async ({ client, body, say }) => {
+  if (body['event']['text'].includes('ping')) {
+    await say('pong :table_tennis_paddle_and_ball:')
+  } else {
+    await uploadScreenShot({ client, body })
+  }
 })
 
 module.exports.handler = async (event, context, callback) => {

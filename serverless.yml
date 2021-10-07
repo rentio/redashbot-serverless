@@ -1,5 +1,6 @@
 service: redash-bot-bolt
 frameworkVersion: '2'
+variablesResolutionMode: 20210326
 useDotenv: true
 provider:
   name: aws
