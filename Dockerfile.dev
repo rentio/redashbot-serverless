@@ -1,0 +1,3 @@
+FROM lambci/lambda:build-nodejs12.x
+
+RUN yum -y install libappindicator-gtk3 liberation-fonts alsa-lib

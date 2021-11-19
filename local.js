@@ -12,12 +12,12 @@ const app = new App({
 const redashHost = process.env.REDASH_HOST
 
 const getQuery = async (queryId) => {
-  const res = await axios.get(`https://${redashHost}/api/queries/${queryId}?api_key=${process.env.REDASH_API_KEY}`)
+  const res = await axios.get(`http://${redashHost}/api/queries/${queryId}?api_key=${process.env.REDASH_API_KEY}`)
   return res.data
 }
 
 const getDashboard = async (dashboardId) => {
-  const res = await axios.get(`https://${redashHost}/api/dashboards/${dashboardId}?api_key=${process.env.REDASH_API_KEY}`)
+  const res = await axios.get(`http://${redashHost}/api/dashboards/${dashboardId}?api_key=${process.env.REDASH_API_KEY}`)
   return res.data
 }
 
@@ -31,8 +31,8 @@ const uploadScreenShot = async ({ client, body }) => {
   const context = await browser.newContext()
 
   const text = body['event']['text']
-  const queryRegex = new RegExp(`https://${redashHost}/queries/([0-9]+)(?:#([0-9]+))?`)
-  const dashboardRegex = new RegExp(`https://${redashHost}/dashboard/([^?/|>]+)`)
+  const queryRegex = new RegExp(`http://${redashHost}/queries/([0-9]+)(?:#([0-9]+))?`)
+  const dashboardRegex = new RegExp(`http://${redashHost}/dashboard/([^?/|>]+)`)
 
   let embedUrl
   let fileName
@@ -43,7 +43,7 @@ const uploadScreenShot = async ({ client, body }) => {
     const queryId = matches[1]
     const query = await getQuery(queryId)
     const visualizationId = matches[2] || query.visualizations[0].id
-    embedUrl = `https://${redashHost}/embed/query/${queryId}/visualization/${visualizationId}?api_key=${process.env.REDASH_API_KEY}`
+    embedUrl = `http://${redashHost}/embed/query/${queryId}/visualization/${visualizationId}?api_key=${process.env.REDASH_API_KEY}`
     fileName = `/tmp/${query.name}.png`
     originalUrl = matches[0]
   } else if (text.match(dashboardRegex)) {
