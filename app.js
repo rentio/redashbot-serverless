@@ -63,7 +63,7 @@ const uploadScreenShot = async ({ client, body }) => {
   }
 
   const page = await context.newPage()
-  page.setViewportSize({ width: 1024, height: 360 })
+  page.setViewportSize({ width: 1024, height: 480 })
   await page.goto(embedUrl)
   await page.waitForResponse(/results/)
   await page.waitForTimeout(1000)
