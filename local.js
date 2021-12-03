@@ -32,7 +32,7 @@ const uploadScreenShot = async ({ client, body }) => {
 
   const text = body['event']['text']
   const queryRegex = new RegExp(`http://${redashHost}/queries/([0-9]+)(?:#([0-9]+))?`)
-  const dashboardRegex = new RegExp(`http://${redashHost}/dashboard/([^?/|>]+)`)
+  const dashboardRegex = new RegExp(`http://${redashHost}/dashboards/([0-9]+)-[0-9a-z_-]+`)
 
   let embedUrl
   let fileName
