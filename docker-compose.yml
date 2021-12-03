@@ -2,7 +2,7 @@
 # For a production example please refer to getredash/setup repository on GitHub.
 version: "3"
 x-redash-service: &redash-service
-  image: redash/redash:9.0.0-beta.b42121
+  image: redash/redash:10.1.0.b50633
 x-redash-environment: &redash-environment
   REDASH_LOG_LEVEL: "INFO"
   REDASH_REDIS_URL: "redis://redis:6379/0"
@@ -11,6 +11,7 @@ x-redash-environment: &redash-environment
   REDASH_MAIL_DEFAULT_SENDER: "redash@example.com"
   REDASH_MAIL_SERVER: "email"
   REDASH_ENFORCE_CSRF: "true"
+  REDASH_COOKIE_SECRET: "secret"
 services:
   bolt:
     build:
