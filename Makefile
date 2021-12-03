@@ -1,7 +1,7 @@
 setup:
 	docker compose run --rm bolt npm install
 	docker compose run --rm server create_db
-	docker compose run --rm server ./manage.py users create_root --org test_org --password password admin@example.com 'Test Admin'
+	docker compose run --rm server ./manage.py users create_root --org default --password password admin@example.com 'Test Admin'
 	docker compose run --rm server ./manage.py ds new --type pg --options '{"dbname": "postgres", "host": "postgres", "password": "postgres", "port": 5432, "sslmode": "prefer", "user": "postgres"}' 'redash DB'
 sample_query_and_dashboard:
 	curl -X POST "http://localhost:5000/api/queries" -H "Accept: application/json" -H "Authorization: Key ${REDASH_API_KEY}" -d '{"name": "query test", "description": null, "query": "select * from events", "is_draft": false, "data_source_id": 1}'
