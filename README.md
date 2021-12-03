@@ -28,18 +28,18 @@ This is Slack bot for [Redash](https://redash.io/).
 
 ## How to develop
 
-### On your machine
+### On your machine with Docker
 
 First, run `local.js` to start Slack bot.
 (customized `app.js` to work locally since we can't emulate the API Gateway)
 
 ```sh
-$ npm install
-$ export REDASH_HOST=redash.example.com
-$ export REDASH_API_KEY=your-redash-api-key
-$ export SLACK_BOT_TOKEN=xoxb-your-bot-token
-$ export SLACK_SIGNING_SECRET=your-signing-secret
-$ node local.js
+$ make setup
+$ docker compose up
+(Other Terminal)
+$ open http://localhost:5000/users/me
+# Login admin@example.com/password and get User API Key
+$ make REDASH_API_KEY=your-redash-api-key sample_query_and_dashboard
 ```
 
 Next, use ngrok to forward Slack events to your local machine.
