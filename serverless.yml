@@ -8,6 +8,7 @@ provider:
   region: ap-northeast-1
   timeout: 30
   environment:
+    FONT_URL: ${env:FONT_URL}
     REDASH_HOST: ${env:REDASH_HOST}
     SLACK_SIGNING_SECRET: ${env:SLACK_SIGNING_SECRET}
     SLACK_BOT_TOKEN: ${env:SLACK_BOT_TOKEN}
