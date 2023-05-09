@@ -9,11 +9,11 @@ provider:
   timeout: 30
   environment:
     FONT_URL: ${env:FONT_URL}
-    REDASH_HOST: ${env:REDASH_HOST}
-    SLACK_SIGNING_SECRET: ${env:SLACK_SIGNING_SECRET}
-    SLACK_BOT_TOKEN: ${env:SLACK_BOT_TOKEN}
-    REDASH_API_KEY: ${env:REDASH_API_KEY}
     NODE_PATH: "./:/opt/node_modules"
+    REDASH_API_KEY: ${env:REDASH_API_KEY}
+    REDASH_HOST: ${env:REDASH_HOST}
+    SLACK_BOT_TOKEN: ${env:SLACK_BOT_TOKEN}
+    SLACK_SIGNING_SECRET: ${env:SLACK_SIGNING_SECRET}
 functions:
   slack:
     handler: app.handler
