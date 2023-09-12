@@ -26,6 +26,7 @@ services:
       - .:/var/task:delegated
       - node_modules:/var/task/node_modules
       - root_cache:/root/.cache
+    entrypoint: ''
     command: "node local.js"
     depends_on:
       - server
@@ -36,7 +37,7 @@ services:
       - postgres
       - redis
     ports:
-      - "5000:5000"
+      - "5001:5000"
       - "5678:5678"
     environment:
       <<: *redash-environment
@@ -71,9 +72,9 @@ services:
     environment:
       POSTGRES_HOST_AUTH_METHOD: "trust"
   email:
-    image: djfarrelly/maildev
+    image: maildev/maildev
     ports:
-      - "1080:80"
+      - "1081:1080"
     restart: unless-stopped
 volumes:
   node_modules:
