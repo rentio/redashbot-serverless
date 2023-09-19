@@ -1,7 +1,11 @@
 const { App } = require('@slack/bolt')
+const chromium = require("@sparticuz/chromium")
 const { createReadStream } = require('fs')
-const playwright = require('playwright-aws-lambda')
 const axios = require('axios')
+const puppeteer = require("puppeteer-core")
+
+chromium.setHeadlessMode = true
+chromium.setGraphicsMode = false
 
 // Initializes your app with your bot token and signing secret
 const app = new App({
@@ -24,11 +28,15 @@ const getDashboard = async (dashboardId) => {
 const uploadScreenShot = async ({ client, body }) => {
   const fontUrl = process.env.FONT_URL
   if (fontUrl) {
-    await playwright.loadFont(fontUrl)
+    await chromium.font(fontUrl)
   }
 
-  const browser = await playwright.launchChromium({ headless: true })
-  const context = await browser.newContext()
+  const browser = await puppeteer.launch({
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath(),
+    headless: true
+  })
 
   const text = body['event']['text']
   const queryRegex = new RegExp(`http://${redashHost}/queries/([0-9]+)(?:#([0-9]+))?`)
@@ -57,14 +65,14 @@ const uploadScreenShot = async ({ client, body }) => {
     throw('Invalid URL')
   }
 
-  const page = await context.newPage()
-  page.setViewportSize({ width: 1024, height: 480 })
+  const page = await browser.newPage()
+  page.setViewport({ width: 1024, height: 480 })
   await page.goto(embedUrl)
-  await page.waitForResponse(/results/)
+  await page.waitForResponse(response => response.request().url().includes('/results'));
   await page.waitForTimeout(1000)
   await page.screenshot({ fullPage: true, path: fileName })
 
-  browser.close()
+  await browser.close()
 
   await client.files.upload({
     channels: body['event']['channel'],

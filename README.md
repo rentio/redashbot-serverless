@@ -22,7 +22,7 @@ First, run `local.js` to start Slack bot.
 $ make setup
 $ docker compose up
 (Other Terminal)
-$ open http://localhost:5000/users/me
+$ open http://localhost:5001/users/me
 # Login admin@example.com/password and get User API Key
 $ make REDASH_API_KEY=your-redash-api-key sample_query_and_dashboard
 ```
