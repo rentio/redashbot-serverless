@@ -74,7 +74,7 @@ const uploadScreenShot = async ({ client, body }) => {
   page.setViewport({ width: 1024, height: 480 })
   await page.goto(embedUrl)
   await page.waitForResponse(response => response.request().url().includes('/results'));
-  await page.waitForTimeout(1000)
+  await new Promise(resolve => setTimeout(resolve, 2000));
   await page.screenshot({ fullPage: true, path: fileName })
 
   await browser.close()
