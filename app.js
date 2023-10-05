@@ -7,6 +7,12 @@ const puppeteer = require("puppeteer-core")
 chromium.setHeadlessMode = true
 chromium.setGraphicsMode = false
 
+const halfToFullSymbol = (text) => {
+  return text.replace(/[!-\/:-@\[-`\{-~]/g, function(s) {
+    return String.fromCharCode(s.charCodeAt(0) + 0xFEE0);
+  });
+}
+
 const awsLambdaReceiver = new AwsLambdaReceiver({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
 })
@@ -57,14 +63,14 @@ const uploadScreenShot = async ({ client, body }) => {
     const query = await getQuery(queryId)
     const visualizationId = matches[2] || query.visualizations[0].id
     embedUrl = `https://${redashHost}/embed/query/${queryId}/visualization/${visualizationId}?api_key=${process.env.REDASH_API_KEY}`
-    fileName = `/tmp/${query.name}.png`
+    fileName = `/tmp/${halfToFullSymbol(query.name)}.png`
     originalUrl = matches[0]
   } else if (text.match(dashboardRegex)) {
     const matches = text.match(dashboardRegex)
     const dashboardId = matches[1]
     const dashboard = await getDashboard(dashboardId)
     embedUrl = dashboard.public_url
-    fileName = `/tmp/${dashboard.name}.png`
+    fileName = `/tmp/${halfToFullSymbol(dashboard.name)}.png`
     originalUrl = matches[0]
   } else {
     throw('Invalid URL')
@@ -74,7 +80,7 @@ const uploadScreenShot = async ({ client, body }) => {
   page.setViewport({ width: 1024, height: 480 })
   await page.goto(embedUrl)
   await page.waitForResponse(response => response.request().url().includes('/results'));
-  await page.waitForTimeout(1000)
+  await new Promise(resolve => setTimeout(resolve, 2000));
   await page.screenshot({ fullPage: true, path: fileName })
 
   await browser.close()
