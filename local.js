@@ -1,6 +1,5 @@
 const { App } = require('@slack/bolt')
 const chromium = require("@sparticuz/chromium")
-const { createReadStream } = require('fs')
 const axios = require('axios')
 const puppeteer = require("puppeteer-core")
 
@@ -80,10 +79,11 @@ const uploadScreenShot = async ({ client, body }) => {
 
   await browser.close()
 
-  await client.files.upload({
-    channels: body['event']['channel'],
+  await client.filesUploadV2({
+    channel_id: body['event']['channel'],
     initial_comment: `Taking screenshot of ${originalUrl}`,
-    file: createReadStream(fileName),
+    file: fileName,
+    filetype: 'png'
   })
 }
 
