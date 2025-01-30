@@ -49,6 +49,7 @@ const uploadScreenShot = async ({ client, body }) => {
 
   let embedUrl
   let fileName
+  let filePath
   let originalUrl
 
   if (text.match(queryRegex)) {
@@ -57,14 +58,16 @@ const uploadScreenShot = async ({ client, body }) => {
     const query = await getQuery(queryId)
     const visualizationId = matches[2] || query.visualizations[0].id
     embedUrl = `http://${redashHost}/embed/query/${queryId}/visualization/${visualizationId}?api_key=${process.env.REDASH_API_KEY}`
-    fileName = `/tmp/${halfToFullSymbol(query.name)}.png`
+    fileName = halfToFullSymbol(query.name)
+    filePath = `/tmp/${fileName}.png`
     originalUrl = matches[0]
   } else if (text.match(dashboardRegex)) {
     const matches = text.match(dashboardRegex)
     const dashboardId = matches[1]
     const dashboard = await getDashboard(dashboardId)
     embedUrl = dashboard.public_url
-    fileName = `/tmp/${halfToFullSymbol(dashboard.name)}.png`
+    fileName = halfToFullSymbol(dashboard.name)
+    filePath = `/tmp/${fileName}.png`
     originalUrl = matches[0]
   } else {
     throw('Invalid URL')
@@ -75,14 +78,15 @@ const uploadScreenShot = async ({ client, body }) => {
   await page.goto(embedUrl)
   await page.waitForResponse(response => response.request().url().includes('/results'));
   await new Promise(resolve => setTimeout(resolve, 2000));
-  await page.screenshot({ fullPage: true, path: fileName })
+  await page.screenshot({ fullPage: true, path: filePath })
 
   await browser.close()
 
   await client.filesUploadV2({
     channel_id: body['event']['channel'],
     initial_comment: `Taking screenshot of ${originalUrl}`,
-    file: fileName,
+    file: filePath,
+    filename: fileName,
     filetype: 'png'
   })
 }
