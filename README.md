@@ -52,3 +52,7 @@ https://docs.aws.amazon.com/lambda/latest/dg/code-editor.html
 
 In most cases, Redash is located in a VPC.
 If Slack bot needs to access the VPC, uncomment vpc section of `serverless.yml`.
+
+### If you want to use your preferred font (Optional)
+
+Place your preferred font files in the `fonts/` directory.
