@@ -4,11 +4,10 @@ variablesResolutionMode: 20210326
 useDotenv: true
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs22.x
   region: ap-northeast-1
   timeout: 30
   environment:
-    FONT_URL: ${env:FONT_URL}
     NODE_PATH: "./:/opt/node_modules"
     REDASH_API_KEY: ${env:REDASH_API_KEY}
     REDASH_HOST: ${env:REDASH_HOST}
@@ -34,16 +33,18 @@ package:
     - '!node_modules/**'
     - '!package.json'
     - '!package-lock.json'
+    - '!fonts'
 layers:
   slackLayer:
     path: ./
-    compatibleRuntimes: nodejs18.x
+    compatibleRuntimes: nodejs22.x
     package:
       patterns:
         - 'node_modules/**'
         - '!app.js'
         - package.json
         - package-lock.json
+        - 'fonts/**'
 # resources:
 #   Resources:
 #     PrivateSubnetA:

@@ -36,11 +36,6 @@ const getDashboard = async (dashboardId) => {
 }
 
 const uploadScreenShot = async ({ client, body }) => {
-  const fontUrl = process.env.FONT_URL
-  if (fontUrl) {
-    await chromium.font(fontUrl)
-  }
-
   const browser = await puppeteer.launch({
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
