@@ -1,3 +1,7 @@
+This repository has moved to [rentio/redashbot-sam](https://github.com/rentio/redashbot-sam)
+
+---
+
 # Slack Bot for Redash on AWS Lambda
 
 This is Slack bot for [Redash](https://redash.io/).
